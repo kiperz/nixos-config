@@ -18,6 +18,7 @@ in
     ../../nixos/networking.nix
     ../../nixos/nix.nix
     ../../nixos/printing.nix
+    ../../nixos/sysctl.nix
     ../../nixos/users.nix
     ../../themes
   ];
@@ -36,6 +37,18 @@ in
 
   # Polkit
   security.polkit.enable = true;
+
+  # GVFS — enables MTP (phones), trash, SMB/NFS in file managers
+  services.gvfs.enable = true;
+
+  # Removable media filesystems
+  boot.supportedFilesystems = [ "btrfs" "ntfs" "exfat" ];
+
+  # Zram — compressed swap in RAM for better responsiveness
+  zramSwap = {
+    enable = true;
+    memoryPercent = 50;
+  };
 
   # SSH
   services.openssh.enable = true;
@@ -78,6 +91,8 @@ in
     pciutils
     usbutils
     lshw
+    man-db
+    man-pages
   ];
 
   system.stateVersion = "24.11";

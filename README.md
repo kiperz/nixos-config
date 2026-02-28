@@ -140,6 +140,8 @@ Search for `CHANGEME` across the config — these are values you must update:
 | `Print` | Screenshot (fullscreen → satty) |
 | `Super+Shift+S` | Screenshot (region → satty) |
 | `Super+Shift+R` | Toggle screen recording |
+| `XF86AudioPlay` | Play/Pause media |
+| `XF86AudioNext/Prev` | Next/Previous track |
 
 ## Structure
 
@@ -162,7 +164,8 @@ Search for `CHANGEME` across the config — these are values you must update:
 │   ├── locale.nix               # Warsaw, PL layout
 │   ├── networking.nix           # NetworkManager
 │   ├── nix.nix                  # Flakes, GC, caches
-│   ├── printing.nix             # CUPS
+│   ├── printing.nix             # CUPS + PDF printer
+│   ├── sysctl.nix               # inotify limits, fast shutdown
 │   └── users.nix                # kiper account
 ├── home/
 │   ├── packages.nix             # All user packages

@@ -264,6 +264,10 @@ in
       bindl = [
         ", XF86AudioMute, exec, swayosd-client --output-volume mute-toggle"
         ", XF86AudioMicMute, exec, swayosd-client --input-volume mute-toggle"
+        ", XF86AudioPlay, exec, playerctl play-pause"
+        ", XF86AudioNext, exec, playerctl next"
+        ", XF86AudioPrev, exec, playerctl previous"
+        ", XF86AudioStop, exec, playerctl stop"
       ];
 
       # ── Exec Once ─────────────────────────────────────────

@@ -19,6 +19,8 @@
     # Dev tools
     lazygit
     lazydocker
+    gh # GitHub CLI
+    imagemagick
 
     # Hyprland ecosystem
     hyprpicker # Color picker
@@ -44,10 +46,13 @@
     # Media
     mpv
     imv
+    playerctl # Media key control (play/pause/next/prev)
 
     # File management
     xfce.thunar
     xfce.thunar-volman
+    xfce.tumbler # Thumbnail generation for Thunar
+    ffmpegthumbnailer # Video thumbnails
     udiskie
 
     # Notifications
@@ -56,6 +61,9 @@
     # Auth / security
     keepassxc
     polkit_gnome
+
+    # Image format support
+    webp-pixbuf-loader # WebP in GTK apps
 
     # Appearance
     papirus-icon-theme

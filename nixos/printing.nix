@@ -6,6 +6,7 @@
     drivers = with pkgs; [
       gutenprint
       gutenprintBin
+      cups-pdf-to-pdf
     ];
   };
 

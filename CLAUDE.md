@@ -37,7 +37,7 @@ flake.nix
        └─ hardware-configuration.nix  # Generated, machine-specific
 ```
 
-- **`nixos/`** — System-level modules (one file per concern: audio, bluetooth, boot, btrfs, docker, gpu, greetd, locale, networking, nix, printing, users, flatpak)
+- **`nixos/`** — System-level modules (one file per concern: audio, bluetooth, boot, btrfs, docker, flatpak, gpu, greetd, locale, networking, nix, printing, sysctl, users)
 - **`home/programs/`** — Per-application Home Manager configs (browser, editor, fish, ghostty, git, neovim, yazi, zellij)
 - **`home/system/`** — Desktop environment modules (hyprland, waybar, fuzzel, mako, hypridle, hyprlock, swww)
 - **`home/packages.nix`** — All user-level packages in one file
