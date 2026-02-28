@@ -79,7 +79,6 @@
 
     # System info
     fastfetch
-    v4l-utils # Camera/video device tools
 
     # Wayland utilities
     wtype # Keyboard input simulation (for emoji picker)
