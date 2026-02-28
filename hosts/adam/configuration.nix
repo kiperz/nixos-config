@@ -172,6 +172,9 @@ in
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1";
     ELECTRON_OZONE_PLATFORM_HINT = "wayland";
+    # VA-API — explicit driver path for apps in FHS envs (e.g. Parsec)
+    LIBVA_DRIVER_NAME = "iHD";
+    LIBVA_DRIVERS_PATH = "/run/opengl-driver/lib/dri";
   };
 
   # System packages (minimal — most go in home-manager)
