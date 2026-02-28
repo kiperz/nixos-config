@@ -28,6 +28,9 @@ in
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
+    extraPackages = with pkgs; [
+      intel-media-driver # VA-API for Intel UHD 620 (Kaby Lake+)
+    ];
   };
 
   services.xserver.videoDrivers = [ "nvidia" ];
