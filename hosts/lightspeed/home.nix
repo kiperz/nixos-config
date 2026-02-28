@@ -90,6 +90,9 @@ in
     enableFishIntegration = true;
   };
 
+  # Stylix: tell it which Firefox profile to theme
+  stylix.targets.firefox.profileNames = [ "default" ];
+
   # bat (theme set by Stylix)
   programs.bat.enable = true;
 

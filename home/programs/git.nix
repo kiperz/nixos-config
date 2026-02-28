@@ -6,10 +6,10 @@ in
 {
   programs.git = {
     enable = true;
-    userName = vars.gitUsername;
-    userEmail = vars.email;
 
-    extraConfig = {
+    settings = {
+      user.name = vars.gitUsername;
+      user.email = vars.email;
       init.defaultBranch = "main";
       pull.rebase = true;
       push.autoSetupRemote = true;
@@ -18,14 +18,15 @@ in
       merge.conflictstyle = "zdiff3";
       rerere.enabled = true;
     };
+  };
 
-    delta = {
-      enable = true;
-      options = {
-        navigate = true;
-        line-numbers = true;
-        syntax-theme = "base16";
-      };
+  programs.delta = {
+    enable = true;
+    enableGitIntegration = true;
+    options = {
+      navigate = true;
+      line-numbers = true;
+      syntax-theme = "base16";
     };
   };
 }

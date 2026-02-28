@@ -2,7 +2,7 @@
 
 {
   # Disable PulseAudio (PipeWire replaces it)
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
 
   # PipeWire
   security.rtkit.enable = true;

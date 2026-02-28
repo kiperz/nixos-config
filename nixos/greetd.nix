@@ -1,15 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  services.greetd = {
-    enable = true;
-    settings = {
-      default_session = {
-        command = "${pkgs.regreet}/bin/regreet";
-        user = "greeter";
-      };
-    };
-  };
+  services.greetd.enable = true;
 
   # regreet config
   programs.regreet = {
