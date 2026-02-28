@@ -94,5 +94,7 @@
 
     # Remote desktop
     parsec-bin
+    remmina      # RDP/VNC client (GUI)
+    freerdp      # RDP library used by Remmina
   ];
 }
