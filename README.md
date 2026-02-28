@@ -181,12 +181,8 @@ ls /sys/class/hwmon/*/temp*_input
 mkdir -p ~/wallpapers
 # Place your wallpaper at ~/wallpapers/space-solarized.png
 
-# Add Flathub
-flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-
-# Install Flatpak apps
-flatpak install flathub md.obsidian.Obsidian
-flatpak install flathub dev.vencord.Vesktop
+# Flatpak apps (Vesktop, Spotify) are installed declaratively via nix-flatpak
+# To add more, edit services.flatpak.packages in hosts/<hostname>/configuration.nix
 
 # Verify setup
 nvidia-smi                            # GPU driver loaded
@@ -279,7 +275,7 @@ Search for `CHANGEME` across the config — these are values you must update:
 │   ├── boot.nix                 # systemd-boot + latest kernel
 │   ├── btrfs.nix                # btrfs scrub + btrbk snapshots
 │   ├── docker.nix               # Docker daemon
-│   ├── flatpak.nix              # Flatpak + Flathub
+│   ├── flatpak.nix              # Flatpak + Flathub (declarative via nix-flatpak)
 │   ├── gpu.nix                  # NVIDIA desktop (lightspeed only)
 │   ├── greetd.nix               # GUI login
 │   ├── locale.nix               # Warsaw, PL layout

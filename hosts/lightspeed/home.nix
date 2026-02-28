@@ -26,6 +26,12 @@ in
     ../../home/system/swww.nix
   ];
 
+  # Lightspeed-specific packages
+  home.packages = with pkgs; [
+    headsetcontrol # Logitech headset sidetone/battery control
+    easyeffects    # PipeWire EQ/compression for mic & output
+  ];
+
   home = {
     username = vars.username;
     homeDirectory = "/home/${vars.username}";
