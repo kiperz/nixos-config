@@ -11,11 +11,11 @@
       };
 
       listener = [
-        # Dim screen at 5 minutes
+        # Dim screen at 5 minutes (desktop — no backlight, use Hyprland dim)
         {
           timeout = 300;
-          on-timeout = "brightnessctl -s set 10";
-          on-resume = "brightnessctl -r";
+          on-timeout = "hyprctl keyword decoration:dim_strength 0.5";
+          on-resume = "hyprctl keyword decoration:dim_strength 0.0";
         }
         # Lock at 10 minutes
         {

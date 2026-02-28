@@ -15,7 +15,7 @@ in
       ];
       trusted-public-keys = [
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-        "hyprland.cachix.org-1:a7pgxzMz7+ voices2F1vVEr3FOGSo2+ZSTHg0/gOpvFlM=" # CHANGEME: verify at https://app.cachix.org/cache/hyprland
+        "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
       ];
     };
 

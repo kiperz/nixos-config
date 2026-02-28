@@ -4,6 +4,10 @@
 
 { config, lib, pkgs, modulesPath, ... }:
 
+let
+  btrfsOpts = [ "compress=zstd:1" "noatime" "space_cache=v2" "ssd" "discard=async" ];
+  btrfsNoCow = [ "noatime" "ssd" "discard=async" "nodatacow" ];
+in
 {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
@@ -12,11 +16,16 @@
   # --- PLACEHOLDER VALUES — REPLACE AFTER nixos-generate-config ---
 
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
-  boot.initrd.kernelModules = [ "dm-snapshot" ];
+  boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
-  # NVMe Drive 1: NixOS (LVM on LUKS)
+  # LUKS (btrfs directly on the LUKS device — no LVM)
+  boot.initrd.luks.devices."cryptbtrfs" = {
+    device = "/dev/disk/by-partlabel/CRYPTBTRFS"; # CHANGEME: use actual partition UUID
+    allowDiscards = true; # SSD TRIM through LUKS
+  };
+
   # EFI partition
   fileSystems."/boot" = {
     device = "/dev/disk/by-label/BOOT";
@@ -24,28 +33,54 @@
     options = [ "fmask=0077" "dmask=0077" ];
   };
 
-  # Root (inside LUKS → LVM)
+  # Btrfs subvolumes
   fileSystems."/" = {
-    device = "/dev/vg-nixos/lv-root";
-    fsType = "ext4";
+    device = "/dev/mapper/cryptbtrfs";
+    fsType = "btrfs";
+    options = [ "subvol=@root" ] ++ btrfsOpts;
   };
 
-  # Home (inside LUKS → LVM)
   fileSystems."/home" = {
-    device = "/dev/vg-nixos/lv-home";
-    fsType = "ext4";
+    device = "/dev/mapper/cryptbtrfs";
+    fsType = "btrfs";
+    options = [ "subvol=@home" ] ++ btrfsOpts;
   };
 
+  fileSystems."/nix" = {
+    device = "/dev/mapper/cryptbtrfs";
+    fsType = "btrfs";
+    options = [ "subvol=@nix" ] ++ btrfsNoCow;
+  };
+
+  fileSystems."/devel" = {
+    device = "/dev/mapper/cryptbtrfs";
+    fsType = "btrfs";
+    options = [ "subvol=@devel" ] ++ btrfsOpts;
+  };
+
+  fileSystems."/var/log" = {
+    device = "/dev/mapper/cryptbtrfs";
+    fsType = "btrfs";
+    options = [ "subvol=@log" ] ++ btrfsOpts;
+    neededForBoot = true;
+  };
+
+  fileSystems."/.snapshots" = {
+    device = "/dev/mapper/cryptbtrfs";
+    fsType = "btrfs";
+    options = [ "subvol=@snapshots" ] ++ btrfsOpts;
+  };
+
+  fileSystems."/swap" = {
+    device = "/dev/mapper/cryptbtrfs";
+    fsType = "btrfs";
+    options = [ "subvol=@swap" ] ++ btrfsNoCow;
+  };
+
+  # Swap file on the @swap subvolume
   swapDevices = [
-    { device = "/dev/vg-nixos/lv-swap"; }
+    { device = "/swap/swapfile"; size = 64 * 1024; }
   ];
-
-  # LUKS
-  boot.initrd.luks.devices."cryptlvm" = {
-    device = "/dev/disk/by-partlabel/CRYPTLVM"; # CHANGEME: use actual partition UUID
-    preLVM = true;
-    allowDiscards = true; # SSD TRIM through LUKS
-  };
 
   # CPU
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;

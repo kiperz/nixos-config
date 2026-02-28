@@ -13,7 +13,7 @@
     modesetting.enable = true;
     powerManagement.enable = false; # Desktop, not laptop
     powerManagement.finegrained = false;
-    open = false; # RTX 3090 Ti — use proprietary
+    open = true; # RTX 3090 Ti (Ampere) — open kernel modules
     nvidiaSettings = true;
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };

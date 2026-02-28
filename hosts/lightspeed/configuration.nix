@@ -9,6 +9,7 @@ in
     ../../nixos/audio.nix
     ../../nixos/bluetooth.nix
     ../../nixos/boot.nix
+    ../../nixos/btrfs.nix
     ../../nixos/docker.nix
     ../../nixos/flatpak.nix
     ../../nixos/gpu.nix

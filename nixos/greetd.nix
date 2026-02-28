@@ -16,7 +16,7 @@
     enable = true;
     settings = {
       background = {
-        path = "/etc/greetd/wallpaper.png"; # Symlink your wallpaper here
+        path = config.stylix.image;
         fit = "Cover";
       };
       GTK = {

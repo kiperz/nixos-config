@@ -17,6 +17,7 @@
   wallpaperPath = "~/wallpapers/space-solarized.png";
   screenshotDir = "~/Pictures/Screenshots";
   screenRecordDir = "~/Videos/Recordings";
+  develPath = "/devel";
 
   # Monitors — update after first boot with `hyprctl monitors`
   # Left: 27" 4K 60Hz, Right: 32" 4K 240Hz (primary)

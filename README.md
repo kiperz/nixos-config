@@ -1,6 +1,6 @@
 # NixOS Bonkers Setup — `lightspeed`
 
-> NixOS + Hyprland + Solarized · dual 4K · NVIDIA RTX 3090 Ti · LVM on LUKS
+> NixOS + Hyprland + Solarized · dual 4K · NVIDIA RTX 3090 Ti · btrfs on LUKS
 
 ## Quick Start
 
@@ -10,31 +10,42 @@
 # Partition (Drive 1: NixOS)
 gdisk /dev/nvme0n1
 # p1: 512M EFI (ef00), label: BOOT
-# p2: remaining, Linux LVM (8e00), label: CRYPTLVM
+# p2: remaining, Linux filesystem (8300), label: CRYPTBTRFS
 
 # Encrypt
-cryptsetup luksFormat --type luks2 /dev/disk/by-partlabel/CRYPTLVM
-cryptsetup open /dev/disk/by-partlabel/CRYPTLVM cryptlvm
+cryptsetup luksFormat --type luks2 /dev/disk/by-partlabel/CRYPTBTRFS
+cryptsetup open /dev/disk/by-partlabel/CRYPTBTRFS cryptbtrfs
 
-# LVM
-pvcreate /dev/mapper/cryptlvm
-vgcreate vg-nixos /dev/mapper/cryptlvm
-lvcreate -L 64G vg-nixos -n lv-swap    # Match your RAM
-lvcreate -L 200G vg-nixos -n lv-root
-lvcreate -l 100%FREE vg-nixos -n lv-home
-
-# Format
+# Create btrfs filesystem
 mkfs.fat -F32 -n BOOT /dev/nvme0n1p1
-mkfs.ext4 -L nixos /dev/vg-nixos/lv-root
-mkfs.ext4 -L home /dev/vg-nixos/lv-home
-mkswap /dev/vg-nixos/lv-swap
+mkfs.btrfs -L nixos /dev/mapper/cryptbtrfs
 
-# Mount
-mount /dev/vg-nixos/lv-root /mnt
-mkdir -p /mnt/boot /mnt/home
+# Create subvolumes
+mount /dev/mapper/cryptbtrfs /mnt
+btrfs subvolume create /mnt/@root
+btrfs subvolume create /mnt/@home
+btrfs subvolume create /mnt/@nix
+btrfs subvolume create /mnt/@devel
+btrfs subvolume create /mnt/@log
+btrfs subvolume create /mnt/@snapshots
+btrfs subvolume create /mnt/@swap
+umount /mnt
+
+# Mount subvolumes
+mount -o subvol=@root,compress=zstd:1,noatime,space_cache=v2,ssd,discard=async /dev/mapper/cryptbtrfs /mnt
+mkdir -p /mnt/{boot,home,nix,devel,var/log,.snapshots,swap}
+
 mount /dev/nvme0n1p1 /mnt/boot
-mount /dev/vg-nixos/lv-home /mnt/home
-swapon /dev/vg-nixos/lv-swap
+mount -o subvol=@home,compress=zstd:1,noatime,space_cache=v2,ssd,discard=async /dev/mapper/cryptbtrfs /mnt/home
+mount -o subvol=@nix,noatime,ssd,discard=async,nodatacow /dev/mapper/cryptbtrfs /mnt/nix
+mount -o subvol=@devel,compress=zstd:1,noatime,space_cache=v2,ssd,discard=async /dev/mapper/cryptbtrfs /mnt/devel
+mount -o subvol=@log,compress=zstd:1,noatime,space_cache=v2,ssd,discard=async /dev/mapper/cryptbtrfs /mnt/var/log
+mount -o subvol=@snapshots,compress=zstd:1,noatime,space_cache=v2,ssd,discard=async /dev/mapper/cryptbtrfs /mnt/.snapshots
+mount -o subvol=@swap,noatime,ssd,discard=async,nodatacow /dev/mapper/cryptbtrfs /mnt/swap
+
+# Swap file (match your RAM for hibernation)
+btrfs filesystem mkswapfile --size 64g /mnt/swap/swapfile
+swapon /mnt/swap/swapfile
 
 # Generate hardware config
 nixos-generate-config --root /mnt
@@ -96,7 +107,7 @@ Search for `CHANGEME` across the config — these are values you must update:
 | File | What |
 |------|------|
 | `hosts/lightspeed/variables.nix` | email, gitUsername, monitorLeft, monitorRight |
-| `hosts/lightspeed/hardware-configuration.nix` | Replace entirely with generated version |
+| `hosts/lightspeed/hardware-configuration.nix` | Replace with generated version (btrfs subvolumes auto-detected) |
 | `themes/default.nix` | Wallpaper sha256 hash |
 | `nixos/nix.nix` | Verify Hyprland cachix public key |
 | `home/system/waybar.nix` | temperature hwmon path |
@@ -142,7 +153,8 @@ Search for `CHANGEME` across the config — these are values you must update:
 ├── nixos/                       # System modules
 │   ├── audio.nix                # PipeWire
 │   ├── bluetooth.nix            # Bluez + Blueman
-│   ├── boot.nix                 # LUKS + systemd-boot
+│   ├── boot.nix                 # LUKS + btrfs + systemd-boot
+│   ├── btrfs.nix                # btrfs scrub + btrbk snapshots
 │   ├── docker.nix               # Docker daemon
 │   ├── flatpak.nix              # Flatpak + Flathub
 │   ├── gpu.nix                  # NVIDIA 3090 Ti

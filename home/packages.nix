@@ -64,9 +64,6 @@
     libsForQt5.qtstyleplugin-kvantum
     kdePackages.qtstyleplugin-kvantum
 
-    # Networking
-    networkmanagerapplet
-
     # System info
     fastfetch
 
@@ -74,9 +71,9 @@
     wtype # Keyboard input simulation (for emoji picker)
 
     # Nix tools
-    nix-output-monitor
+    nil # Nix LSP (for VSCode and other editors)
 
-    # lorri for direnv
-    lorri
+    # Archive support
+    p7zip
   ];
 }

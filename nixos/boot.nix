@@ -27,11 +27,14 @@
     # Kernel
     kernelPackages = pkgs.linuxPackages_latest;
 
-    # initrd for LUKS + LVM
+    # initrd for LUKS + btrfs
     initrd = {
       systemd.enable = true;
-      kernelModules = [ "dm-snapshot" ];
+      supportedFilesystems = [ "btrfs" ];
     };
+
+    # Btrfs support at runtime
+    supportedFilesystems = [ "btrfs" ];
 
     # Console font (larger for 4K)
     consoleLogLevel = 3;
