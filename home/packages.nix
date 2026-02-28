@@ -91,5 +91,8 @@
 
     # Browsers
     google-chrome
+
+    # Remote desktop
+    parsec-bin
   ];
 }
