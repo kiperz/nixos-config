@@ -79,6 +79,13 @@ in
     options = [ "subvol=@swap" ] ++ btrfsNoCow;
   };
 
+  # Archive drive (NTFS, sda2)
+  fileSystems."/mnt/archive" = {
+    device = "/dev/disk/by-uuid/1CA2587FA2585F78";
+    fsType = "ntfs3";
+    options = [ "nofail" "uid=1000" "gid=100" "dmask=022" "fmask=022" ];
+  };
+
   # Swap file on @swap subvolume
   swapDevices = [
     { device = "/swap/swapfile"; }
