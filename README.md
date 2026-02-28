@@ -116,9 +116,10 @@ cd /mnt/home/<user>/.config/nixos
 
 **Option A — Automated (recommended):**
 ```bash
-# The install script handles everything: merges hardware config, patches LUKS UUID,
-# fetches wallpaper hash, prompts for email/username, and runs nixos-install.
-bash install.sh /dev/nvme0n1p2   # ← your LUKS partition
+# install.sh handles: kernel modules merge, LUKS+EFI UUID patching,
+# GPU bus ID detection (PRIME hosts), wallpaper hash, email/username prompt.
+bash install.sh lightspeed /dev/nvme0n1p2   # ← host name + LUKS partition
+bash install.sh adam       /dev/nvme0n1p2
 ```
 
 **Option B — Manual:**
