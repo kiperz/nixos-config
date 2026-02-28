@@ -1,0 +1,41 @@
+{ config, pkgs, lib, ... }:
+
+{
+  # NVIDIA proprietary drivers
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
+
+  services.xserver.videoDrivers = [ "nvidia" ];
+
+  hardware.nvidia = {
+    modesetting.enable = true;
+    powerManagement.enable = false; # Desktop, not laptop
+    powerManagement.finegrained = false;
+    open = false; # RTX 3090 Ti — use proprietary
+    nvidiaSettings = true;
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
+  };
+
+  # Wayland + NVIDIA env vars
+  environment.sessionVariables = {
+    GBM_BACKEND = "nvidia-drm";
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+    LIBVA_DRIVER_NAME = "nvidia";
+    WLR_NO_HARDWARE_CURSORS = "1"; # Fix invisible cursor on some setups
+    __GL_GSYNC_ALLOWED = "1";
+    __GL_VRR_ALLOWED = "1";
+  };
+
+  # Kernel module early load
+  boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
+  boot.kernelParams = [ "nvidia-drm.modeset=1" "nvidia-drm.fbdev=1" ];
+
+  # NVENC for gpu-screen-recorder
+  environment.systemPackages = with pkgs; [
+    nvidia-vaapi-driver
+    libva
+    libva-utils
+  ];
+}

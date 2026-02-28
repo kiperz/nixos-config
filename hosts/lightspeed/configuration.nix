@@ -1,0 +1,83 @@
+{ config, pkgs, inputs, lib, ... }:
+
+let
+  vars = import ./variables.nix;
+in
+{
+  imports = [
+    ./hardware-configuration.nix
+    ../../nixos/audio.nix
+    ../../nixos/bluetooth.nix
+    ../../nixos/boot.nix
+    ../../nixos/docker.nix
+    ../../nixos/flatpak.nix
+    ../../nixos/gpu.nix
+    ../../nixos/greetd.nix
+    ../../nixos/locale.nix
+    ../../nixos/networking.nix
+    ../../nixos/nix.nix
+    ../../nixos/printing.nix
+    ../../nixos/users.nix
+    ../../themes
+  ];
+
+  networking.hostName = vars.hostname;
+
+  # XDG Portal
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-hyprland
+      xdg-desktop-portal-gtk
+    ];
+    config.common.default = [ "hyprland" "gtk" ];
+  };
+
+  # Polkit
+  security.polkit.enable = true;
+
+  # SSH
+  services.openssh.enable = true;
+  programs.ssh.startAgent = false; # Using gnome-keyring instead
+  services.gnome.gnome-keyring.enable = true;
+  security.pam.services.greetd.enableGnomeKeyring = true;
+  security.pam.services.hyprlock.enableGnomeKeyring = true;
+
+  # Fonts
+  fonts = {
+    enableDefaultPackages = true;
+    packages = with pkgs; [
+      nerd-fonts.sauce-code-pro
+      noto-fonts
+      noto-fonts-cjk-sans
+      noto-fonts-emoji
+    ];
+    fontconfig = {
+      defaultFonts = {
+        monospace = [ "SauceCodePro Nerd Font" ];
+        sansSerif = [ "Noto Sans" ];
+        serif = [ "Noto Serif" ];
+        emoji = [ "Noto Color Emoji" ];
+      };
+    };
+  };
+
+  # Electron apps: force Wayland
+  environment.sessionVariables = {
+    NIXOS_OZONE_WL = "1";
+    ELECTRON_OZONE_PLATFORM_HINT = "wayland";
+  };
+
+  # System packages (minimal — most go in home-manager)
+  environment.systemPackages = with pkgs; [
+    vim
+    wget
+    curl
+    git
+    pciutils
+    usbutils
+    lshw
+  ];
+
+  system.stateVersion = "24.11";
+}
