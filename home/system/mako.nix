@@ -15,8 +15,7 @@
       padding = "12";
       border-size = 2;
       border-radius = 8;
-      font = "SauceCodePro Nerd Font 11";
-      # Colors handled by Stylix
+      # Font and colors handled by Stylix
     };
   };
 }

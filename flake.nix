@@ -20,25 +20,23 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    firefox-addons = {
+      url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, stylix, nixvim, sops-nix, ... }@inputs:
-    let
-      system = "x86_64-linux";
-      pkgs = import nixpkgs {
-        inherit system;
-        config.allowUnfree = true;
-      };
-    in
+  outputs = { self, nixpkgs, home-manager, stylix, nixvim, sops-nix, firefox-addons, ... }@inputs:
     {
       nixosConfigurations.lightspeed = nixpkgs.lib.nixosSystem {
-        inherit system;
         specialArgs = { inherit inputs; };
         modules = [
           ./hosts/lightspeed/configuration.nix
           stylix.nixosModules.stylix
           home-manager.nixosModules.home-manager
           sops-nix.nixosModules.sops
+          { nixpkgs.config.allowUnfree = true; }
           {
             home-manager = {
               useGlobalPkgs = true;

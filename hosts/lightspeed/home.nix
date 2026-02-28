@@ -5,7 +5,7 @@ let
 in
 {
   imports = [
-    inputs.nixvim.homeManagerModules.nixvim
+    inputs.nixvim.homeModules.nixvim
     ../../home/packages.nix
     # Programs
     ../../home/programs/browser.nix
@@ -38,13 +38,7 @@ in
   # Let Home Manager manage itself
   programs.home-manager.enable = true;
 
-  # Cursor (Stylix handles theme, this sets size/name for Hyprland)
-  home.pointerCursor = {
-    name = "Bibata-Modern-Classic";
-    package = pkgs.bibata-cursors;
-    size = 24;
-    gtk.enable = true;
-  };
+  # Cursor config handled by Stylix (themes/default.nix)
 
   # Qt theming
   qt = {
@@ -96,11 +90,8 @@ in
     enableFishIntegration = true;
   };
 
-  # bat
-  programs.bat = {
-    enable = true;
-    config.theme = "base16";
-  };
+  # bat (theme set by Stylix)
+  programs.bat.enable = true;
 
   # bottom (btm)
   programs.bottom.enable = true;

@@ -14,7 +14,7 @@
     file
     tree
     tldr
-    du-dust
+    dust
 
     # Dev tools
     lazygit
@@ -49,9 +49,9 @@
     playerctl # Media key control (play/pause/next/prev)
 
     # File management
-    xfce.thunar
-    xfce.thunar-volman
-    xfce.tumbler # Thumbnail generation for Thunar
+    thunar
+    thunar-volman
+    tumbler # Thumbnail generation for Thunar
     ffmpegthumbnailer # Video thumbnails
     udiskie
 

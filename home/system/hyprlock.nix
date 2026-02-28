@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   programs.hyprlock = {
@@ -11,7 +11,7 @@
         no_fade_in = false;
       };
 
-      background = [{
+      background = lib.mkForce [{
         path = "screenshot";
         blur_passes = 3;
         blur_size = 8;
@@ -21,7 +21,7 @@
         vibrancy = 0.17;
       }];
 
-      label = [
+      label = lib.mkForce [
         # Clock
         {
           text = "cmd[update:1000] echo $(date +%H:%M)";
@@ -55,7 +55,7 @@
         }
       ];
 
-      input-field = [{
+      input-field = lib.mkForce [{
         size = "300, 50";
         outline_thickness = 2;
         dots_size = 0.25;

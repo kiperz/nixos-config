@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   programs.vscode = {
@@ -30,22 +30,19 @@
     ];
 
     userSettings = {
-      # Editor
-      "editor.fontFamily" = "'SauceCodePro Nerd Font', 'monospace', monospace";
-      "editor.fontSize" = 14;
+      # Editor (font family set by Stylix)
+      "editor.fontSize" = lib.mkForce 14;
       "editor.fontLigatures" = true;
       "editor.minimap.enabled" = false;
       "editor.renderWhitespace" = "boundary";
       "editor.bracketPairColorization.enabled" = true;
       "editor.smoothScrolling" = true;
 
-      # Terminal
-      "terminal.integrated.fontFamily" = "SauceCodePro Nerd Font";
-      "terminal.integrated.fontSize" = 13;
+      # Terminal (font family set by Stylix)
+      "terminal.integrated.fontSize" = lib.mkForce 13;
       "terminal.integrated.defaultProfile.linux" = "fish";
 
-      # Theme
-      "workbench.colorTheme" = "Solarized Dark";
+      # Theme (color theme set by Stylix)
       "workbench.iconTheme" = "vs-solarized";
 
       # Files

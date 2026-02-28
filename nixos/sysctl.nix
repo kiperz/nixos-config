@@ -8,7 +8,5 @@
   };
 
   # Faster shutdown — don't wait 90s for hanging services
-  systemd.extraConfig = ''
-    DefaultTimeoutStopSec=10s
-  '';
+  systemd.settings.Manager.DefaultTimeoutStopSec = "10s";
 }

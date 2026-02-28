@@ -209,14 +209,16 @@
     # Neo-tree (file explorer)
     plugins.neo-tree = {
       enable = true;
-      closeIfLastWindow = true;
-      filesystem = {
-        followCurrentFile.enabled = true;
-        hijackNetrwBehavior = "open_current";
-        filteredItems = {
-          visible = true;
-          hideDotfiles = false;
-          hideGitignored = true;
+      settings = {
+        close_if_last_window = true;
+        filesystem = {
+          follow_current_file.enabled = true;
+          hijack_netrw_behavior = "open_current";
+          filtered_items = {
+            visible = true;
+            hide_dotfiles = false;
+            hide_gitignored = true;
+          };
         };
       };
     };
@@ -237,13 +239,9 @@
     };
 
     # DAP (Debug Adapter Protocol)
-    plugins.dap = {
-      enable = true;
-      extensions = {
-        dap-ui.enable = true;
-        dap-virtual-text.enable = true;
-      };
-    };
+    plugins.dap.enable = true;
+    plugins.dap-ui.enable = true;
+    plugins.dap-virtual-text.enable = true;
 
     # Misc
     plugins.web-devicons.enable = true;

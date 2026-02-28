@@ -5,7 +5,7 @@
     enable = true;
     settings = {
       main = {
-        font = "SauceCodePro Nerd Font:size=13";
+        # Font set by Stylix
         terminal = "ghostty -e";
         prompt = "❯ ";
         layer = "overlay";

@@ -1,5 +1,8 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
+let
+  addons = inputs.firefox-addons.packages.${pkgs.system};
+in
 {
   programs.firefox = {
     enable = true;
@@ -9,7 +12,7 @@
       isDefault = true;
 
       # Extensions
-      extensions.packages = with pkgs.firefox-addons; [
+      extensions.packages = with addons; [
         ublock-origin
         darkreader
         privacy-badger
@@ -50,7 +53,7 @@
 
       # Search engines
       search = {
-        default = "DuckDuckGo";
+        default = "ddg";
         force = true;
       };
     };
