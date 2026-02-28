@@ -17,6 +17,7 @@ in
       diff.algorithm = "histogram";
       merge.conflictstyle = "zdiff3";
       rerere.enabled = true;
+      credential."https://github.com".helper = "!${pkgs.gh}/bin/gh auth git-credential";
     };
   };
 
