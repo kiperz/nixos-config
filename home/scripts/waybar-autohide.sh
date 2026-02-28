@@ -4,9 +4,12 @@
 SHOW_THRESHOLD=2  # px from top to show bar
 HIDE_THRESHOLD=50 # px from top — moving below this hides bar
 
+# Kill any existing waybar and start fresh
+pkill waybar 2>/dev/null
+sleep 0.5
 waybar &
-sleep 0.8
-pkill -SIGUSR1 waybar  # start hidden
+sleep 2.0  # Wait for waybar to fully initialize before hiding
+pkill -SIGUSR1 waybar
 visible=false
 
 while true; do
