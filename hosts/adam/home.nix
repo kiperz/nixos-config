@@ -26,6 +26,14 @@ in
     ../../home/system/swww.nix
   ];
 
+  # Adam-specific packages
+  home.packages = with pkgs; [
+    google-chrome
+    parsec-bin
+    remmina   # RDP/VNC client (GUI)
+    freerdp   # RDP library used by Remmina
+  ];
+
   home = {
     username = vars.username;
     homeDirectory = "/home/${vars.username}";
@@ -90,6 +98,7 @@ in
 
   # Stylix: tell it which Firefox profile to theme
   stylix.targets.firefox.profileNames = [ "default" ];
+  stylix.targets.waybar.enable = false; # Custom CSS in waybar.nix
 
   # bat (theme set by Stylix)
   programs.bat.enable = true;

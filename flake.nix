@@ -30,9 +30,11 @@
       url = "github:sadjow/claude-code-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
   };
 
-  outputs = { self, nixpkgs, home-manager, stylix, nixvim, sops-nix, firefox-addons, claude-code, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, stylix, nixvim, sops-nix, firefox-addons, claude-code, nix-flatpak, ... }@inputs:
     let
       lightspeedVars = import ./hosts/lightspeed/variables.nix;
       adamVars = import ./hosts/adam/variables.nix;
@@ -45,6 +47,7 @@
           stylix.nixosModules.stylix
           home-manager.nixosModules.home-manager
           sops-nix.nixosModules.sops
+          nix-flatpak.nixosModules.nix-flatpak
           { nixpkgs.config.allowUnfree = true; }
           {
             home-manager = {
@@ -64,6 +67,7 @@
           stylix.nixosModules.stylix
           home-manager.nixosModules.home-manager
           sops-nix.nixosModules.sops
+          nix-flatpak.nixosModules.nix-flatpak
           { nixpkgs.config.allowUnfree = true; }
           {
             home-manager = {

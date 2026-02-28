@@ -74,6 +74,9 @@
     libsForQt5.qtstyleplugin-kvantum
     kdePackages.qtstyleplugin-kvantum
 
+    # Waybar extras
+    wttrbar # Rich weather tooltip for waybar
+
     # System info
     fastfetch
 
@@ -86,15 +89,11 @@
     # Network discovery
     wsdd # Windows Service Discovery for Thunar network browsing
 
+    # Virtualization / disk images
+    libguestfs-with-appliance # guestmount for VHDX/VHD/qcow2
+    qemu_kvm # provides qemu-img/qemu-nbd needed by libguestfs
+
     # Archive support
     p7zip
-
-    # Browsers
-    google-chrome
-
-    # Remote desktop
-    parsec-bin
-    remmina      # RDP/VNC client (GUI)
-    freerdp      # RDP library used by Remmina
   ];
 }
