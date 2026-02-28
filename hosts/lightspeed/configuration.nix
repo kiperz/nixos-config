@@ -35,11 +35,19 @@ in
     config.common.default = [ "hyprland" "gtk" ];
   };
 
+  programs.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+  };
+
   # Polkit
   security.polkit.enable = true;
 
   # GVFS — enables MTP (phones), trash, SMB/NFS in file managers
   services.gvfs.enable = true;
+
+  # Color management for CUPS/printers
+  services.colord.enable = true;
 
   # Removable media filesystems
   boot.supportedFilesystems = [ "btrfs" "ntfs" "exfat" ];

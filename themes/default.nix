@@ -11,8 +11,8 @@
 
     # Wallpaper (required by Stylix even if swww manages it)
     image = pkgs.fetchurl {
-      url = "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=3840&q=95";
-      sha256 = "0000000000000000000000000000000000000000000000000000"; # CHANGEME: nix-prefetch-url
+      url = "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=3840";
+      sha256 = "0viv6dq66in3rw8yp8d5gjp34wcv4nc78rhc1za1dmi08vzh03i2";
       name = "space-solarized-wallpaper.jpg";
     };
 

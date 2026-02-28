@@ -94,6 +94,15 @@ in
         vfr = true;
       };
 
+      # ── NVIDIA / Multi-monitor ──────────────────────────────
+      cursor = {
+        no_hardware_cursors = true; # Replaces deprecated WLR_NO_HARDWARE_CURSORS
+      };
+
+      render = {
+        direct_scanout = false; # Prevents page-flip errors on mixed refresh rate monitors
+      };
+
       # ── XWayland ──────────────────────────────────────────
       xwayland = {
         force_zero_scaling = true;
@@ -103,49 +112,43 @@ in
       # 1-9 across both monitors, Hyprland decides placement
       # No explicit workspace-to-monitor binding
 
-      # ── Window Rules ──────────────────────────────────────
-      windowrulev2 = [
+      # ── Window Rules (v3 syntax, Hyprland 0.53+) ─────────
+      windowrule = [
         # Float utility windows
-        "float, class:^(thunar)$"
-        "size 1000 700, class:^(thunar)$"
-        "float, class:^(pavucontrol)$"
-        "size 800 600, class:^(pavucontrol)$"
-        "float, class:^(blueman-manager)$"
-        "size 700 500, class:^(blueman-manager)$"
-        "float, class:^(nm-connection-editor)$"
-        "float, class:^(.blueman-manager-wrapped)$"
-        "float, class:^(system-config-printer)$"
+        "match:class ^(thunar)$, float on"
+        "match:class ^(thunar)$, size 1000 700"
+        "match:class ^(pavucontrol)$, float on"
+        "match:class ^(pavucontrol)$, size 800 600"
+        "match:class ^(blueman-manager)$, float on"
+        "match:class ^(blueman-manager)$, size 700 500"
+        "match:class ^(nm-connection-editor)$, float on"
+        "match:class ^(.blueman-manager-wrapped)$, float on"
+        "match:class ^(system-config-printer)$, float on"
 
         # Float file dialogs
-        "float, title:^(Open File)$"
-        "float, title:^(Save File)$"
-        "float, title:^(Open Folder)$"
-        "float, title:^(Save As)$"
-        "float, title:^(File Upload)$"
+        "match:title ^(Open File)$, float on"
+        "match:title ^(Save File)$, float on"
+        "match:title ^(Open Folder)$, float on"
+        "match:title ^(Save As)$, float on"
+        "match:title ^(File Upload)$, float on"
 
         # Float polkit
-        "float, class:^(polkit-gnome-authentication-agent-1)$"
+        "match:class ^(polkit-gnome-authentication-agent-1)$, float on"
 
         # Float KeePassXC
-        "float, class:^(org.keepassxc.KeePassXC)$"
-        "size 1000 700, class:^(org.keepassxc.KeePassXC)$"
-
-        # Float small windows
-        "float, maxsize 600 400"
+        "match:class ^(org.keepassxc.KeePassXC)$, float on"
+        "match:class ^(org.keepassxc.KeePassXC)$, size 1000 700"
 
         # Picture-in-picture
-        "float, title:^(Picture-in-Picture)$"
-        "pin, title:^(Picture-in-Picture)$"
-        "size 480 270, title:^(Picture-in-Picture)$"
+        "match:title ^(Picture-in-Picture)$, float on"
+        "match:title ^(Picture-in-Picture)$, pin on"
+        "match:title ^(Picture-in-Picture)$, size 480 270"
 
         # Satty screenshot editor
-        "float, class:^(satty)$"
-
-        # Inhibit idle for fullscreen apps
-        "idleinhibit fullscreen, fullscreen:1"
+        "match:class ^(satty)$, float on"
 
         # Immediate focus for dialogs
-        "stayfocused, class:^(polkit-gnome-authentication-agent-1)$"
+        "match:class ^(polkit-gnome-authentication-agent-1)$, stay_focused on"
       ];
 
       # ── Keybinds ──────────────────────────────────────────

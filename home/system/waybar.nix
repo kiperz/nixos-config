@@ -53,7 +53,7 @@
       };
 
       temperature = {
-        hwmon-path-abs = "/sys/devices/pci0000:00/0000:00:18.3/hwmon"; # CHANGEME: AMD CPU temp
+        hwmon-path-abs = "/sys/devices/pci0000:00/0000:00:18.3/hwmon";
         input-filename = "temp1_input";
         critical-threshold = 80;
         format = " {temperatureC}°C";

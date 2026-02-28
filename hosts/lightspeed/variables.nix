@@ -2,15 +2,15 @@
   # User
   username = "kiper";
   fullName = "Kacper";
-  email = "CHANGEME@example.com"; # Set your email
-  gitUsername = "CHANGEME"; # Set your git username
+  email = "kiperz@gmail.com"; # Set your email
+  gitUsername = "kiperz"; # Set your git username
 
   # System
   hostname = "lightspeed";
   timezone = "Europe/Warsaw";
   locale = "en_US.UTF-8";
   keyboardLayout = "pl";
-  keyboardVariant = "programmer";
+  keyboardVariant = "";
 
   # Paths
   configDir = "~/.config/nixos";
@@ -19,10 +19,10 @@
   screenRecordDir = "~/Videos/Recordings";
   develPath = "/devel";
 
-  # Monitors — update after first boot with `hyprctl monitors`
-  # Left: 27" 4K 60Hz, Right: 32" 4K 240Hz (primary)
-  monitorLeft = "DP-1"; # CHANGEME after first boot
-  monitorRight = "DP-2"; # CHANGEME after first boot
+  # Monitors (from `hyprctl monitors`)
+  # Left: HP 727pk 27" 4K 60Hz, Right: Samsung Odyssey G80SD 32" 4K 240Hz (primary)
+  monitorLeft = "DP-2";
+  monitorRight = "DP-1";
 
   # Theme
   theme = "solarized-dark"; # or "solarized-light"

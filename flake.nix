@@ -25,9 +25,14 @@
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    claude-code = {
+      url = "github:sadjow/claude-code-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, stylix, nixvim, sops-nix, firefox-addons, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, stylix, nixvim, sops-nix, firefox-addons, claude-code, ... }@inputs:
     {
       nixosConfigurations.lightspeed = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; };

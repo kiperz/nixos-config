@@ -36,8 +36,8 @@
       clipboard-paste-protection = false;
 
       # Bell
-      audible-bell = false;
-      visual-bell = false;
+      #audible-bell = false;
+      #visual-bell = false;
 
       # Confirm close
       confirm-close-surface = false;

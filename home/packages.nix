@@ -1,7 +1,9 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   home.packages = with pkgs; [
+    # AI
+    inputs.claude-code.packages.${pkgs.system}.default
     # CLI essentials
     ripgrep
     fd
@@ -80,6 +82,9 @@
 
     # Nix tools
     nil # Nix LSP (for VSCode and other editors)
+
+    # Network discovery
+    wsdd # Windows Service Discovery for Thunar network browsing
 
     # Archive support
     p7zip

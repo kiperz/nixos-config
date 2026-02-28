@@ -17,7 +17,7 @@
       snapshot_preserve = "48h 14d 4w 3m";
       snapshot_dir = "@snapshots";
 
-      volume."/dev/mapper/cryptbtrfs" = {
+      volume."/mnt/btrfs-root" = {
         subvolume."@root" = {
           snapshot_name = "root";
         };
