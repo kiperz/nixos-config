@@ -93,7 +93,6 @@ in
   # Flatpak apps (declarative via nix-flatpak)
   services.flatpak.packages = [
     "dev.vencord.Vesktop"
-    "com.spotify.Client"
   ];
 
   # System packages (minimal — most go in home-manager)

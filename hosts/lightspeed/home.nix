@@ -14,6 +14,7 @@ in
     ../../home/programs/ghostty.nix
     ../../home/programs/git.nix
     ../../home/programs/neovim.nix
+    ../../home/programs/spotify.nix
     ../../home/programs/yazi.nix
     ../../home/programs/zellij.nix
     # Desktop environment
