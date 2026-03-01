@@ -4,12 +4,27 @@
   programs.fish = {
     enable = true;
 
+    plugins = [
+      { name = "bobthefish"; src = pkgs.fishPlugins.bobthefish.src; }
+    ];
+
     interactiveShellInit = ''
       # Emacs-style keybinds (default, explicit)
       fish_default_key_bindings
 
       # No greeting
       set -g fish_greeting
+
+      # bobthefish powerline theme config
+      set -g theme_color_scheme solarized-dark
+      set -g theme_nerd_fonts yes
+      set -g theme_display_git yes
+      set -g theme_display_git_dirty yes
+      set -g theme_display_git_untracked yes
+      set -g theme_display_git_ahead_verbose yes
+      set -g theme_display_date no
+      set -g theme_display_cmd_duration yes
+      set -g theme_powerline_fonts yes
 
       # Zellij auto-attach (if not already inside zellij)
       if not set -q ZELLIJ
@@ -89,45 +104,4 @@
     };
   };
 
-  # Starship prompt — compact one-line
-  programs.starship = {
-    enable = true;
-    enableFishIntegration = true;
-    settings = {
-      add_newline = false;
-      format = "$directory$git_branch$git_status$nix_shell$character";
-
-      directory = {
-        truncation_length = 3;
-        truncate_to_repo = true;
-        style = "bold cyan";
-      };
-
-      git_branch = {
-        format = "[$branch]($style) ";
-        style = "bold green";
-      };
-
-      git_status = {
-        format = "[$all_status$ahead_behind]($style) ";
-        style = "bold yellow";
-      };
-
-      nix_shell = {
-        format = "[$symbol$name]($style) ";
-        symbol = " ";
-        style = "bold blue";
-      };
-
-      character = {
-        success_symbol = "[❯](bold green)";
-        error_symbol = "[❯](bold red)";
-      };
-
-      # Disable modules we don't need on the prompt line
-      cmd_duration.disabled = true;
-      hostname.disabled = true;
-      username.disabled = true;
-    };
-  };
 }
