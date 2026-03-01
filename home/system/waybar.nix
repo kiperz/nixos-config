@@ -9,7 +9,7 @@
       position = "top";
       height = 38;
       spacing = 4;
-      margin-top = 6;
+      margin-top = 0;
       margin-left = 8;
       margin-right = 8;
 
