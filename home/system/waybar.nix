@@ -267,8 +267,8 @@
       };
 
       clock = {
-        format = "  {:%H:%M}";
-        format-alt = "  {:%A, %B %d, %Y}";
+        format = "{:%H:%M}";
+        format-alt = "{:%A, %B %d, %Y}";
         tooltip-format = "<tt><small>{calendar}</small></tt>";
         calendar = {
           mode = "year";
