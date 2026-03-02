@@ -29,9 +29,9 @@ let
   };
 
   pwas = {
-    messenger = mkPwa { id = 1; name = "Messenger"; url = "https://messenger.com";    class = "messenger"; icon = "firefox"; };
+    messenger = mkPwa { id = 1; name = "Messenger"; url = "https://messenger.com";    class = "messenger"; icon = "messenger"; };
     gmail     = mkPwa { id = 2; name = "Gmail";     url = "https://mail.google.com"; class = "gmail";     icon = "gmail";     };
-    claude    = mkPwa { id = 3; name = "Claude";    url = "https://claude.ai";       class = "claude";    icon = "firefox"; };
+    claude    = mkPwa { id = 3; name = "Claude";    url = "https://claude.ai";       class = "claude";    icon = "claude";    };
     github    = mkPwa { id = 4; name = "GitHub";    url = "https://github.com";      class = "github";    icon = "github";    };
   };
 in
@@ -42,40 +42,82 @@ in
   xdg.desktopEntries =
     lib.mapAttrs (_: p: p.desktopEntry) pwas;
 
-  # Activation script to fetch PWA manifest icons (best-effort, non-blocking)
+  # Activation script to fetch PWA icons with fallback to Google gstatic
   home.activation.fetchPwaIcons = lib.hm.dag.entryAfter ["writeBoundary"] ''
     mkdir -p "$HOME/.local/share/icons/hicolor/192x192/apps"
 
-    # Helper function to fetch icon from PWA manifest
-    fetchPwaIcon() {
+    # Strategy 1: Try PWA manifest.json
+    fetchFromManifest() {
       local name="$1"
       local url="$2"
-      local iconDir="$HOME/.local/share/icons/hicolor/192x192/apps"
+      local outFile="$3"
 
-      # Try to fetch manifest.json (with timeout, silent fail)
       local manifest
-      manifest=$(timeout 5 ${pkgs.curl}/bin/curl -s "$url/manifest.json" 2>/dev/null) || return 0
+      manifest=$(timeout 5 ${pkgs.curl}/bin/curl -s "$url/manifest.json" 2>/dev/null) || true
+      [ -z "$manifest" ] && manifest=$(timeout 5 ${pkgs.curl}/bin/curl -s "$url/site.webmanifest" 2>/dev/null) || true
 
-      [ -z "$manifest" ] && manifest=$(timeout 5 ${pkgs.curl}/bin/curl -s "$url/site.webmanifest" 2>/dev/null) || return 0
+      [ -z "$manifest" ] && return 1
 
-      # Extract icon URL - prefer 192x192 or largest
       local iconUrl
       iconUrl=$(echo "$manifest" | ${pkgs.jq}/bin/jq -r '.icons[] | select(.sizes | contains("192")) | .src' 2>/dev/null | head -1)
       [ -z "$iconUrl" ] && iconUrl=$(echo "$manifest" | ${pkgs.jq}/bin/jq -r '.icons[].src' 2>/dev/null | head -1)
 
-      [ -z "$iconUrl" ] && return 0
+      [ -z "$iconUrl" ] && return 1
 
-      # Make absolute URL if relative
       if [[ ! "$iconUrl" =~ ^https?:// ]]; then
         iconUrl="$url/''${iconUrl#/}"
       fi
 
-      # Download icon
-      timeout 10 ${pkgs.curl}/bin/curl -sLf "$iconUrl" -o "$iconDir/$name.png" 2>/dev/null || return 0
+      timeout 10 ${pkgs.curl}/bin/curl -sLf "$iconUrl" -o "$outFile" 2>/dev/null && return 0
+      return 1
     }
 
-    # Fetch icons (best-effort, don't block on errors)
+    # Strategy 2: Fall back to Google gstatic faviconV2 API (works for JS-rendered sites)
+    fetchFromGstatic() {
+      local name="$1"
+      local url="$2"
+      local outFile="$3"
+
+      local domain
+      domain=$(printf '%s\n' "$url" | ${pkgs.gnused}/bin/sed 's|https\?://||;s|/.*||')
+      local gstaticUrl="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://$domain&size=256"
+
+      timeout 10 ${pkgs.curl}/bin/curl -sLf "$gstaticUrl" -o "$outFile" 2>/dev/null && return 0
+      return 1
+    }
+
+    # Resize icon to 192x192
+    resizeIcon() {
+      local outFile="$1"
+      [ -f "$outFile" ] && ${pkgs.imagemagick}/bin/convert "$outFile" -resize 192x192 "$outFile" 2>/dev/null || true
+    }
+
+    # Fetch icon with fallback chain
+    fetchPwaIcon() {
+      local name="$1"
+      local url="$2"
+      local outFile="$HOME/.local/share/icons/hicolor/192x192/apps/$name.png"
+
+      if fetchFromManifest "$name" "$url" "$outFile"; then
+        echo "Downloaded icon for $name from manifest"
+        resizeIcon "$outFile"
+        return 0
+      fi
+
+      if fetchFromGstatic "$name" "$url" "$outFile"; then
+        echo "Downloaded icon for $name from Google gstatic"
+        resizeIcon "$outFile"
+        return 0
+      fi
+
+      echo "Warning: Could not fetch icon for $name"
+      return 0
+    }
+
+    # Fetch icons for all PWAs (best-effort, non-blocking)
+    fetchPwaIcon "messenger" "https://messenger.com" || true
     fetchPwaIcon "gmail" "https://mail.google.com" || true
+    fetchPwaIcon "claude" "https://claude.ai" || true
     fetchPwaIcon "github" "https://github.com" || true
 
     # Update icon cache
