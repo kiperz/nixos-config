@@ -392,16 +392,10 @@
         color: #dc322f;
         font-size: 10px;
         padding: 0 6px;
-        animation: blink 1s linear infinite;
       }
 
       #custom-notifications:hover {
         color: #fdf6e3;
-      }
-
-      @keyframes blink {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.6; }
       }
 
       /* ── Workspaces (centered dock) ──────────────────────── */
