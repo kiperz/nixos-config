@@ -19,6 +19,7 @@
       # Left 3 permanent + 2 contextual | ··· workspaces ··· | 3 right
       modules-left = [
         "custom/logo"
+        "custom/notifications"
         "tray"
         "group/hardware"
         "custom/media"
@@ -40,6 +41,15 @@
         format = "󱄅";
         on-click = "fuzzel";
         tooltip = false;
+      };
+
+      # ── Notifications (swaync indicator) ────────────────────
+      "custom/notifications" = {
+        format = "●";
+        exec = "swaync-client -c";
+        on-click = "swaync-client -t -sw";
+        return-type = "text";
+        interval = 1;
       };
 
       # ── Workspaces (centered, with app icons) ─────────────
@@ -375,6 +385,23 @@
 
       #custom-logo:hover {
         color: #fdf6e3;
+      }
+
+      /* ── Notifications ─────────────────────────────────────── */
+      #custom-notifications {
+        color: #dc322f;
+        font-size: 10px;
+        padding: 0 6px;
+        animation: blink 1s linear infinite;
+      }
+
+      #custom-notifications:hover {
+        color: #fdf6e3;
+      }
+
+      @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.6; }
       }
 
       /* ── Workspaces (centered dock) ──────────────────────── */

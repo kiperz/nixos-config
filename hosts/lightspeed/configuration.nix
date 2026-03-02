@@ -27,7 +27,7 @@ in
 
   networking.hostName = vars.hostname;
 
-  # XDG Portal
+  # XDG Portal — Hyprland module provides portal support
   xdg.portal = {
     enable = true;
     extraPortals = with pkgs; [

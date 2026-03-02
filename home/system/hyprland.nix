@@ -294,7 +294,7 @@
         (if (vars.waybarAutohide or false)
           then "$HOME/.config/nixos/home/scripts/waybar-autohide.sh"
           else "waybar")
-        "mako"
+        "swaync"
         "swww-daemon && swww img ${vars.wallpaperPath} --transition-type wipe --transition-duration 2"
         "wl-paste --type text --watch cliphist store"
         "wl-paste --type image --watch cliphist store"
@@ -306,6 +306,8 @@
         "hyprsunset"
         "swayosd-server"
         "gnome-keyring-daemon --start --components=secrets,ssh"
+        "firefox --name \"messenger\" -P \"messenger\" --no-remote \"https://messenger.com\""
+        "flatpak run dev.vencord.Vesktop"
       ];
     };
 

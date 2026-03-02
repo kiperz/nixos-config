@@ -23,7 +23,7 @@ in
     ../../home/system/hyprland.nix
     ../../home/system/waybar.nix
     ../../home/system/fuzzel.nix
-    ../../home/system/mako.nix
+    ../../home/system/swaync.nix
     ../../home/system/hypridle.nix
     ../../home/system/hyprlock.nix
     ../../home/system/swww.nix
