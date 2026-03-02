@@ -78,38 +78,38 @@ in
   home.activation.fetchPwaIcons = lib.hm.dag.entryAfter ["writeBoundary"] ''
     $DRY_RUN_CMD mkdir -p "$HOME/.local/share/icons/hicolor/192x192/apps"
 
-    # Helper function to fetch icon from PWA manifest
+    # Helper function to fetch icon from PWA manifest (non-blocking on failure)
     fetchPwaIcon() {
       local name="$1"
       local url="$2"
       local iconDir="$HOME/.local/share/icons/hicolor/192x192/apps"
 
-      # Try to fetch manifest.json
+      # Try to fetch manifest.json (with timeout)
       local manifest
-      manifest=$(${pkgs.curl}/bin/curl -s "$url/manifest.json" 2>/dev/null)
+      manifest=$(timeout 5 ${pkgs.curl}/bin/curl -s "$url/manifest.json" 2>/dev/null) || true
 
       if [ -z "$manifest" ]; then
         # Fallback: try /site.webmanifest
-        manifest=$(${pkgs.curl}/bin/curl -s "$url/site.webmanifest" 2>/dev/null)
+        manifest=$(timeout 5 ${pkgs.curl}/bin/curl -s "$url/site.webmanifest" 2>/dev/null) || true
       fi
 
       if [ -z "$manifest" ]; then
-        echo "Could not fetch manifest for $name"
-        return 1
+        echo "Warning: Could not fetch manifest for $name (skipping)"
+        return 0
       fi
 
       # Extract icon URL - prefer 192x192 or largest icon
       local iconUrl
-      iconUrl=$(echo "$manifest" | ${pkgs.jq}/bin/jq -r '.icons[] | select(.sizes | contains("192")) | .src' | head -1)
+      iconUrl=$(echo "$manifest" | ${pkgs.jq}/bin/jq -r '.icons[] | select(.sizes | contains("192")) | .src' 2>/dev/null | head -1) || true
 
       # Fallback to largest icon if 192x192 not found
       if [ -z "$iconUrl" ]; then
-        iconUrl=$(echo "$manifest" | ${pkgs.jq}/bin/jq -r '.icons[].src' | head -1)
+        iconUrl=$(echo "$manifest" | ${pkgs.jq}/bin/jq -r '.icons[].src' 2>/dev/null | head -1) || true
       fi
 
       if [ -z "$iconUrl" ]; then
-        echo "No icon found in manifest for $name"
-        return 1
+        echo "Warning: No icon found in manifest for $name (skipping)"
+        return 0
       fi
 
       # Make absolute URL if relative
@@ -117,22 +117,22 @@ in
         iconUrl="$url''${iconUrl#/}"
       fi
 
-      # Download icon
-      $DRY_RUN_CMD ${pkgs.curl}/bin/curl -sLf "$iconUrl" -o "$iconDir/$name.png"
+      # Download icon (non-blocking on failure)
+      timeout 10 ${pkgs.curl}/bin/curl -sLf "$iconUrl" -o "$iconDir/$name.png" 2>/dev/null || {
+        echo "Warning: Failed to download icon for $name (skipping)"
+        return 0
+      }
 
       if [ -f "$iconDir/$name.png" ]; then
         echo "Downloaded icon for $name"
-      else
-        echo "Failed to download icon for $name"
-        return 1
       fi
     }
 
-    # Fetch icons for all PWAs
-    fetchPwaIcon "messenger" "https://messenger.com"
-    fetchPwaIcon "gmail" "https://mail.google.com"
-    fetchPwaIcon "claude" "https://claude.ai"
-    fetchPwaIcon "github" "https://github.com"
+    # Fetch icons for all PWAs (non-blocking)
+    fetchPwaIcon "messenger" "https://messenger.com" || true
+    fetchPwaIcon "gmail" "https://mail.google.com" || true
+    fetchPwaIcon "claude" "https://claude.ai" || true
+    fetchPwaIcon "github" "https://github.com" || true
 
     # Update icon cache
     $DRY_RUN_CMD ${pkgs.gtk3}/bin/gtk-update-icon-cache -q "$HOME/.local/share/icons/hicolor" 2>/dev/null || true
