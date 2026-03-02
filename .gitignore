@@ -1,0 +1,34 @@
+# Nix build output
+result
+result-*
+
+# direnv
+.direnv/
+
+# Editor/IDE
+.vscode
+.idea
+*~
+*.swp
+
+# Claude Code (local settings only; settings.local.json is in .claude/)
+.claude/agents
+.claude/commands
+.claude/settings.json
+.claude/skills
+
+# Nix flake ghost files (empty 444 stubs created during dirty rebuilds)
+.bashrc
+.bash_profile
+.zshrc
+.zprofile
+.profile
+.gitconfig
+.gitmodules
+.ripgreprc
+.mcp.json
+HEAD
+config
+hooks
+objects
+refs
