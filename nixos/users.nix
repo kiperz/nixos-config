@@ -1,4 +1,4 @@
-{ config, pkgs, vars, ... }:
+{ config, pkgs, lib, vars, ... }:
 
 {
   # Shared development group
@@ -23,6 +23,15 @@
 
   # Enable Fish system-wide (needed for user shell)
   programs.fish.enable = true;
+
+  # Allow passwordless grub-reboot for "Reboot to Windows" power menu option
+  security.sudo.extraRules = lib.optionals (vars ? windowsBootEntry && vars.windowsBootEntry != null) [{
+    users = [ vars.username ];
+    commands = [{
+      command = "/run/current-system/sw/bin/grub-reboot";
+      options = [ "NOPASSWD" ];
+    }];
+  }];
 
   # /devel permissions: setgid so new files inherit devel group
   systemd.tmpfiles.rules = [

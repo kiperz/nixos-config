@@ -6,6 +6,11 @@
     xwayland.enable = true;
 
     settings = {
+      # ── Environment ─────────────────────────────────────
+      env = lib.optionals (vars ? windowsBootEntry && vars.windowsBootEntry != null) [
+        "POWER_MENU_WINDOWS_BOOT_ENTRY,${vars.windowsBootEntry}"
+      ];
+
       # ── Monitors ──────────────────────────────────────────
       # CHANGEME: update monitor names after first boot with `hyprctl monitors`
       monitor = vars.monitors;
