@@ -26,6 +26,10 @@
     flake = "/home/${vars.username}/.config/nixos";
   };
 
+  # nix-ld — provides /lib64/ld-linux-x86-64.so.2 so downloaded dynamically
+  # linked binaries (e.g. Claude Desktop's VM workspace agent) can run
+  programs.nix-ld.enable = true;
+
   environment.systemPackages = with pkgs; [
     nix-output-monitor # nom - pretty build output
   ];

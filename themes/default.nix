@@ -59,7 +59,7 @@
 
     # Targets — Stylix auto-applies to most, but we can override
     targets = {
-      grub.enable = false; # We use systemd-boot
+      grub.enable = true; # Solarized Dark themed GRUB
       console.enable = true;
       gtk.enable = true;
     };

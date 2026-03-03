@@ -3,7 +3,7 @@
 {
   home.packages = with pkgs; [
     # AI
-    inputs.claude-code.packages.${pkgs.system}.default
+    inputs.claude-code.packages.${pkgs.stdenv.hostPlatform.system}.default
     # CLI essentials
     ripgrep
     fd

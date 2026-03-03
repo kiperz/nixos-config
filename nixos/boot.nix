@@ -3,31 +3,26 @@
 {
   boot = {
     loader = {
-      systemd-boot = {
+      grub = {
         enable = true;
-        consoleMode = "max";
-        editor = false; # Security: prevent kernel param editing
+        device = "nodev";
+        efiSupport = true;
+        useOSProber = true; # Auto-detect Windows on separate drive (nvme1n1)
         configurationLimit = vars.bootGenerations or 10;
-        sortKey = "nixos"; # NixOS entries sort before auto-detected Windows
-        # "Reboot to firmware" entry controlled via loader.conf
-        extraInstallCommands = lib.mkIf (!(vars.showFirmwareEntry or true)) ''
-          echo "auto-firmware no" >> /boot/loader/loader.conf
-        '';
+        # Stylix handles Solarized Dark colors + wallpaper background
+        font = lib.mkForce "${pkgs.terminus_font}/share/fonts/terminus/ter-x24n.pcf.gz";
+        fontSize = 24;
       };
       efi.canTouchEfiVariables = true;
       timeout = 3;
     };
 
-    # Clean boot: suppress kernel spam, keep systemd status visible
+    # Informational kernel logs with Solarized-colored TTY
     kernelParams = [
-      "quiet"
-      "loglevel=3"
-      "systemd.show_status=auto"
+      "loglevel=6"
+      "systemd.show_status=true"
       "rd.udev.log_level=3"
     ];
-
-    # Plymouth disabled intentionally — we want to see systemd startup
-    # but without the kernel debug wall
 
     # Kernel
     kernelPackages = pkgs.linuxPackages_latest;
@@ -41,14 +36,32 @@
     # Btrfs support at runtime
     supportedFilesystems = [ "btrfs" ];
 
-    # Console font (larger for 4K)
-    consoleLogLevel = 3;
+    # Informational console output
+    consoleLogLevel = 6;
   };
 
-  # Early console font for HiDPI
+  # Solarized Dark TTY — beautiful LUKS prompt + kernel logs
   console = {
     earlySetup = true;
-    font = "ter-v24n";
+    font = "ter-v32n"; # Larger for 4K displays
     packages = [ pkgs.terminus_font ];
+    colors = [
+      "002b36" # color0  base03 (background)
+      "dc322f" # color1  red
+      "859900" # color2  green
+      "b58900" # color3  yellow
+      "268bd2" # color4  blue
+      "d33682" # color5  magenta
+      "2aa198" # color6  cyan
+      "eee8d5" # color7  base2 (foreground)
+      "073642" # color8  base02
+      "cb4b16" # color9  orange
+      "586e75" # color10 base01
+      "657b83" # color11 base00
+      "839496" # color12 base0
+      "6c71c4" # color13 violet
+      "93a1a1" # color14 base1
+      "fdf6e3" # color15 base3
+    ];
   };
 }

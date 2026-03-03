@@ -11,6 +11,7 @@ in
     # Programs
     ../../home/programs/browser.nix
     ../../home/programs/pwas.nix
+    ../../home/programs/claude-desktop.nix
     ../../home/programs/editor.nix
     ../../home/programs/fish.nix
     ../../home/programs/ghostty.nix

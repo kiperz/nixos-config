@@ -1,5 +1,12 @@
-{ ... }:
+{ pkgs, ... }:
 
+let
+  focus-window = pkgs.writeShellScript "swaync-focus-window" ''
+    # Focus the Hyprland window that sent the notification
+    window_class="''${SWAYNC_DESKTOP_ENTRY:-$SWAYNC_APP_NAME}"
+    [ -n "$window_class" ] && hyprctl dispatch focuswindow "class:(?i)$window_class" 2>/dev/null
+  '';
+in
 {
   services.swaync = {
     enable = true;
@@ -20,6 +27,12 @@
       image-visibility = "when-available";
       control-center-width = 500;
       control-center-height = 600;
+      scripts = {
+        focus-window = {
+          exec = "${focus-window}";
+          run-on = "action";
+        };
+      };
     };
   };
 
