@@ -93,7 +93,6 @@ in
 
   # Flatpak apps (declarative via nix-flatpak)
   services.flatpak.packages = [
-    "dev.vencord.Vesktop"
   ];
 
   # System packages (minimal — most go in home-manager)

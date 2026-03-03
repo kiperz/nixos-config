@@ -30,6 +30,14 @@
   # linked binaries (e.g. Claude Desktop's VM workspace agent) can run
   programs.nix-ld.enable = true;
 
+  # /bin/bash — many external scripts hardcode #!/bin/bash (e.g. Claude Code plugins)
+  system.activationScripts.binbash = {
+    deps = [ "binsh" ];
+    text = ''
+      ln -sf /bin/sh /bin/bash
+    '';
+  };
+
   environment.systemPackages = with pkgs; [
     nix-output-monitor # nom - pretty build output
   ];

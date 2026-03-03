@@ -19,6 +19,7 @@ in
     ../../home/programs/neovim.nix
     ../../home/programs/spotify.nix
     ../../home/programs/yazi.nix
+    ../../home/programs/vesktop.nix
     ../../home/programs/zellij.nix
     # Desktop environment
     ../../home/system/hyprland.nix
@@ -46,8 +47,8 @@ in
     # Ensure common directories exist
     file.".local/share/wallpapers/.keep".text = "";
 
-    # Stylix Solarized theme for Flatpak Vesktop
-    file.".var/app/dev.vencord.Vesktop/config/vesktop/themes/stylix.theme.css".text =
+    # Stylix Solarized theme for Vesktop (native nixpkgs, not Flatpak)
+    file.".config/vesktop/themes/stylix.theme.css".text =
       config.stylix.targets.vesktop.themeBody;
   };
 
