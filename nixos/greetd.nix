@@ -47,7 +47,7 @@ let
 
     windowrule = match:class ^(regreet)$, float on
     windowrule = match:class ^(regreet)$, size 500 400
-    windowrule = match:class ^(regreet)$, center
+    windowrule = match:class ^(regreet)$, center on
 
     exec-once = ${lib.getExe config.programs.regreet.package}; hyprctl dispatch exit
   '';

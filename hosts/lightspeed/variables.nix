@@ -24,8 +24,8 @@
   monitorLeft = "DP-2";
   monitorRight = "DP-1";
   monitors = [
-    "DP-2,3840x2160@60,0x0,1.5"
-    "DP-1,3840x2160@240,2560x0,1.25"
+    "DP-2,3840x2160@60,0x0,1,bitdepth,10"
+    "DP-1,3840x2160@240,3840x0,1,bitdepth,10"
   ];
 
   # Boot
